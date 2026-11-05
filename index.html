@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мусор Дроп — CS2 Case Opening & Mini Game</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Навигация -->
+  <header class="header">
+    <div class="logo">МУСОР <span>ДРОП</span></div>
+    <nav class="nav">
+      <button class="nav-btn active" onclick="switchPage('home')">Главная</button>
+      <button class="nav-btn" onclick="switchPage('cases')">Кейсы</button>
+      <button class="nav-btn" onclick="switchPage('skins')">Скины</button>
+      <button class="nav-btn" onclick="switchPage('minigame')">Мини-Игра</button>
+      <button class="nav-btn" onclick="switchPage('profile')">Профиль</button>
+    </nav>
+    <div class="balance-box">
+      Баланс: <span id="balance">1000</span> ₽
+    </div>
+  </header>
+
+  <!-- Живая лента дропов -->
+  <div class="live-feed">
+    <div class="live-title">LIVE ДРОП:</div>
+    <div class="live-track" id="liveTrack"></div>
+  </div>
+
+  <main class="container">
+
+    <!-- 1. ГЛАВНАЯ СТРАНИЦА -->
+    <section id="home" class="page active">
+      <div class="hero">
+        <h1>САМЫЙ ЧЕСТНЫЙ МУСОРНЫЙ ДРОП CS2</h1>
+        <p>Открывай кейсы, сражайся в мини-игре, выбивай редкие скины и пополняй свой инвентарь!</p>
+        <button class="cta-btn" onclick="switchPage('cases')">ОТКРЫТЬ КЕЙС</button>
+      </div>
+
+      <div class="stats-bar">
+        <div class="stat-item">
+          <h3>148,290</h3>
+          <p>Открыто кейсов</p>
+        </div>
+        <div class="stat-item">
+          <h3>42,100</h3>
+          <p>Игроков</p>
+        </div>
+        <div class="stat-item">
+          <h3>99.9%</h3>
+          <p>Чистого мусора</p>
+        </div>
+      </div>
+
+      <h2>Популярные кейсы</h2>
+      <div class="cases-grid" id="homeCasesGrid"></div>
+    </section>
+
+    <!-- 2. СТРАНИЦА КЕЙСОВ -->
+    <section id="cases" class="page">
+      <h2>Выберите кейс</h2>
+      <div class="cases-grid" id="casesGrid"></div>
+
+      <!-- Модальное окно рулетки -->
+      <div id="rouletteModal" class="modal">
+        <div class="modal-content">
+          <span class="close-btn" onclick="closeRoulette()">&times;</span>
+          <h2 id="modalCaseTitle">Кейс</h2>
+          
+          <div class="roulette-wrapper">
+            <div class="pointer"></div>
+            <div class="roulette-track" id="rouletteTrack"></div>
+          </div>
+
+          <button id="openBtn" class="cta-btn" onclick="spinCase()">Открыть за <span id="casePrice">0</span> ₽</button>
+          
+          <div id="dropResult" class="drop-result">
+            <h3 id="resultTitle">Вы выиграли!</h3>
+            <div id="resultCard" class="skin-card"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. СТРАНИЦА СКИНОФ / МАГАЗИНА -->
+    <section id="skins" class="page">
+      <h2>Магазин Скинов</h2>
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterSkins('all')">Все</button>
+        <button class="filter-btn" onclick="filterSkins('coverty')">Тайное</button>
+        <button class="filter-btn" onclick="filterSkins('classified')">Засекреченное</button>
+        <button class="filter-btn" onclick="filterSkins('restricted')">Запрещенное</button>
+        <button class="filter-btn" onclick="filterSkins('mil-spec')">Армейское</button>
+      </div>
+      <div class="skins-grid" id="skinsGrid"></div>
+    </section>
+
+    <!-- 4. МИНИ-ИГРА -->
+    <section id="minigame" class="page">
+      <h2>Арена Атаки Врагов</h2>
+      <div class="game-container">
+        <div class="game-stats">
+          <div>Уровень: <span id="gameLevel">1</span></div>
+          <div>Монеты за клик: +<span id="gameDmg">10</span> ₽</div>
+        </div>
+
+        <div class="enemy-box" onclick="attackEnemy(event)">
+          <div class="enemy-name" id="enemyName">Terrorist Bot</div>
+          <div class="enemy-avatar" id="enemyAvatar">😈</div>
+          <div class="hp-bar-container">
+            <div class="hp-bar" id="hpBar"></div>
+          </div>
+          <div class="hp-text"><span id="currentHp">100</span> / <span id="maxHp">100</span> HP</div>
+        </div>
+
+        <div class="shop-upgrades">
+          <div class="upgrade-card">
+            <h4>Сила удара (+5)</h4>
+            <p>Цена: <span id="upgDmgCost">50</span> ₽</p>
+            <button class="nav-btn" onclick="buyUpgrade('dmg')">Прокачать</button>
+          </div>
+          <div class="upgrade-card">
+            <h4>Авто-атака (+10/сек)</h4>
+            <p>Цена: <span id="upgAutoCost">150</span> ₽</p>
+            <button class="nav-btn" onclick="buyUpgrade('auto')">Прокачать</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ПРОФИЛЬ -->
+    <section id="profile" class="page">
+      <div class="profile-header">
+        <div class="avatar">🗑️</div>
+        <div>
+          <h2>Мусорный Король</h2>
+          <p>Предметов в инвентаре: <span id="invCount">0</span></p>
+        </div>
+      </div>
+
+      <h3>Ваш инвентарь</h3>
+      <div class="inventory-grid" id="inventoryGrid">
+        <p class="empty-msg">Ваш инвентарь пуст. Открывайте кейсы или покупайте скины!</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
